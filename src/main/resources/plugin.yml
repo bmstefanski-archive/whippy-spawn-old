@@ -1,0 +1,4 @@
+name: WhippySpawn
+main: pl.bmstefanski.spawn.SpawnPlugin
+version: 1.0-SNAPSHOT
+depend: [WhippyTools]
