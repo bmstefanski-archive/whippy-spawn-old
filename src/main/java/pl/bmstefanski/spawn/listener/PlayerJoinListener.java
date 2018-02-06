@@ -22,21 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package pl.bmstefanski.spawn.api;
+package pl.bmstefanski.spawn.listener;
 
-import org.bukkit.Location;
-import pl.bmstefanski.spawn.configuration.SpawnConfig;
-import pl.bmstefanski.tools.Tools;
-import pl.bmstefanski.tools.storage.configuration.Messages;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import pl.bmstefanski.spawn.SpawnPlugin;
 
-public interface SpawnPluginAPI {
+public class PlayerJoinListener implements Listener {
 
-    Location getSpawnLocation();
+    private final SpawnPlugin plugin;
 
-    SpawnConfig getConfiguration();
+    public PlayerJoinListener(SpawnPlugin plugin) {
+        this.plugin = plugin;
+    }
 
-    Messages getMessages();
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
 
-    Tools getParentPlugin();
+        Player player = event.getPlayer();
 
+        if (plugin.getParentPlugin().getConfiguration().getSpawnFirstjoin()) {
+
+            if (!player.hasPlayedBefore()) {
+                player.teleport(plugin.getSpawnLocation());
+            }
+
+        }
+
+    }
 }

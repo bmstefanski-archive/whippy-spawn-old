@@ -62,13 +62,7 @@ public class SpawnCommand implements Executor, Messageable {
 
         if (config.getExists()) {
 
-            int x = config.getX();
-            int y = config.getY();
-            int z = config.getZ();
-            String worldName = config.getWorld();
-
-            Location location = new Location(Bukkit.getWorld(worldName), x, y, z);
-
+            Location location = plugin.getSpawnLocation();
 
             if (arguments.getArgs().length == 0) {
                 if (!(sender instanceof Player)) {

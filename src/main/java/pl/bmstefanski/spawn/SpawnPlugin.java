@@ -24,6 +24,9 @@ SOFTWARE.
 
 package pl.bmstefanski.spawn;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.diorite.config.ConfigManager;
@@ -32,6 +35,8 @@ import pl.bmstefanski.spawn.api.SpawnPluginAPI;
 import pl.bmstefanski.spawn.command.SetSpawnCommand;
 import pl.bmstefanski.spawn.command.SpawnCommand;
 import pl.bmstefanski.spawn.configuration.SpawnConfig;
+import pl.bmstefanski.spawn.listener.PlayerJoinListener;
+import pl.bmstefanski.spawn.listener.PlayerRespawnListener;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
@@ -53,6 +58,11 @@ public class SpawnPlugin extends JavaPlugin implements SpawnPluginAPI {
         this.spawnConfig.load();
         this.spawnConfig.save();
 
+        this.registerListeners(
+                new PlayerJoinListener(this),
+                new PlayerRespawnListener(this)
+        );
+
         this.registerCommands(
                 new SetSpawnCommand(this),
                 new SpawnCommand(this)
@@ -72,6 +82,14 @@ public class SpawnPlugin extends JavaPlugin implements SpawnPluginAPI {
         }
     }
 
+    private void registerListeners(Listener... listeners) {
+
+        for (Listener listener : listeners) {
+            Bukkit.getPluginManager().registerEvents(listener, this);
+        }
+
+    }
+
     private void checkParentPlugin() {
         PluginManager pluginManager = getServer().getPluginManager();
 
@@ -81,6 +99,16 @@ public class SpawnPlugin extends JavaPlugin implements SpawnPluginAPI {
             this.setEnabled(false);
             System.out.println("Cannot load plugin, check if your ./plugins directory contains WhippyTools.jar!");
         }
+    }
+
+    @Override
+    public Location getSpawnLocation() {
+        int x = spawnConfig.getX();
+        int y = spawnConfig.getY();
+        int z = spawnConfig.getZ();
+        String worldName = spawnConfig.getWorld();
+
+        return new Location(Bukkit.getWorld(worldName), x, y, z);
     }
 
     @Override
