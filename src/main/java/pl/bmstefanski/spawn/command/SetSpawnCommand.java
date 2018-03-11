@@ -26,19 +26,19 @@ package pl.bmstefanski.spawn.command;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.bmstefanski.commands.Arguments;
-import pl.bmstefanski.commands.Executor;
+import pl.bmstefanski.commands.CommandArguments;
+import pl.bmstefanski.commands.CommandExecutor;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
-import pl.bmstefanski.commands.annotation.Completer;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.spawn.SpawnPlugin;
 import pl.bmstefanski.spawn.configuration.SpawnConfig;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
-public class SetSpawnCommand implements Executor, Messageable {
+public class SetSpawnCommand implements CommandExecutor, Messageable {
 
     private final SpawnPlugin plugin;
     private final SpawnConfig config;
@@ -53,8 +53,9 @@ public class SetSpawnCommand implements Executor, Messageable {
     @Command(name = "setspawn")
     @GameOnly
     @Permission("tools.command.setspawn")
-    public void command(Arguments arguments) {
-        Player player = (Player) arguments.getSender();
+    @Override
+    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+        Player player = (Player) commandSender;
         Location location = player.getLocation();
 
         String worldName = location.getWorld().getName();
@@ -72,11 +73,6 @@ public class SetSpawnCommand implements Executor, Messageable {
                 new String[] {"%x%", "%y%", "%z%", "%world%"},
                 new String[] {x + "", y + "", z + "", worldName})
         );
-    }
-
-    @Completer("setspawn")
-    public void completer(Arguments arguments) {
-
     }
 
 }

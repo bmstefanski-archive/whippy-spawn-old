@@ -31,6 +31,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.diorite.config.ConfigManager;
 import pl.bmstefanski.commands.BukkitCommands;
+import pl.bmstefanski.commands.CommandExecutor;
 import pl.bmstefanski.spawn.api.SpawnPluginAPI;
 import pl.bmstefanski.spawn.command.SetSpawnCommand;
 import pl.bmstefanski.spawn.command.SpawnCommand;
@@ -74,11 +75,12 @@ public class SpawnPlugin extends JavaPlugin implements SpawnPluginAPI {
         this.spawnConfig.save();
     }
 
-    private void registerCommands(Object... commands) {
+    private void registerCommands(CommandExecutor... commands) {
         BukkitCommands bukkitCommands = new BukkitCommands(this);
 
-        for (Object object : commands) {
-            bukkitCommands.registerCommands(object);
+        for (CommandExecutor executor : commands) {
+            bukkitCommands.register(executor);
+            bukkitCommands.unregisterBlockedCommands(executor, this.getParentPlugin().getConfiguration().getBlockedCommands());
         }
     }
 
