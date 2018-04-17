@@ -1,7 +1,2 @@
-# whippy-spawn 
-
-```xml
-$ git clone https://github.com/whippytools/whippy-spawn.git
-$ mvn clean package
-```
+[This repository is archived, click at me to see new things.](https://github.com/whippytools/whippy-tools)
 
